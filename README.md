@@ -121,7 +121,8 @@ RewriteRule ^(.*)$ index.php?$1 [QSA,L]
     Require all denied
 </Files>
 ```
-```php必要拓展安装
+**php安装必要拓展**
+```bash
 sudo apt install php-fpm php-mysql php-gd php-mbstring -y
 sudo php -v   #查看php版本
 ```
