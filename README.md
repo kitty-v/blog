@@ -121,6 +121,10 @@ RewriteRule ^(.*)$ index.php?$1 [QSA,L]
     Require all denied
 </Files>
 ```
+```php必要拓展安装
+sudo apt install php-fpm php-mysql php-gd php-mbstring -y
+sudo php -v   #查看php版本
+```
 
 ### 5. 修改后台账号密码
 
