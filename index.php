@@ -1628,23 +1628,25 @@ html.dark { background-color: transparent !important; }
 
             if (isHome) {
                 // 返回首页第一页：恢复 hero 和 footer
-                [siteHeader, aboutFooter].forEach(el => {
-                    if (!el) return;
+                // 必须先把 visibility 和 opacity 重置为初始值，再用 rAF 触发淡入过渡；
+                // 若直接设 opacity:1，因为元素刚从 visibility:hidden 恢复，浏览器不会产生过渡动画。
+                const restoreEls = [siteHeader, aboutFooter].filter(Boolean);
+                const existingCs = document.getElementById('collections-section');
+                if (existingCs) restoreEls.push(existingCs);
+
+                restoreEls.forEach(el => {
+                    el.style.transition = 'none';
                     el.style.visibility = '';
                     el.style.pointerEvents = '';
                     el.style.transform = '';
-                    el.style.transition = 'opacity 0.4s ease';
-                    el.style.opacity = '1';
+                    el.style.opacity = '0';
                 });
-                // 如果 collections-section 已被隐藏则恢复；不存在则稍后重建
-                const existingCs = document.getElementById('collections-section');
-                if (existingCs) {
-                    existingCs.style.visibility = '';
-                    existingCs.style.pointerEvents = '';
-                    existingCs.style.transform = '';
-                    existingCs.style.transition = 'opacity 0.4s ease';
-                    existingCs.style.opacity = '1';
-                }
+                requestAnimationFrame(() => {
+                    restoreEls.forEach(el => {
+                        el.style.transition = 'opacity 0.4s ease';
+                        el.style.opacity = '1';
+                    });
+                });
             } else {
                 // 翻页或筛选状态：隐藏 hero/专题/footer
                 // 用 visibility:hidden 替代 display:none + setTimeout，避免异步竞态导致页面卡灰
