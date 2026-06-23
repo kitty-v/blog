@@ -1628,17 +1628,16 @@ html.dark { background-color: transparent !important; }
 
             if (isHome) {
                 // 返回首页第一页：恢复 hero 和 footer
-                // 必须先把 visibility 和 opacity 重置为初始值，再用 rAF 触发淡入过渡；
-                // 若直接设 opacity:1，因为元素刚从 visibility:hidden 恢复，浏览器不会产生过渡动画。
+                // 1. 先移除 display:none（含 PHP 初始渲染时加的 Tailwind hidden 类）
+                // 2. 强制 opacity:0（transition:none），再用 rAF 触发淡入，否则不产生过渡
                 const restoreEls = [siteHeader, aboutFooter].filter(Boolean);
                 const existingCs = document.getElementById('collections-section');
                 if (existingCs) restoreEls.push(existingCs);
 
                 restoreEls.forEach(el => {
+                    el.classList.remove('hidden');   // 移除 PHP 渲染时可能带的 Tailwind hidden
+                    el.style.display = '';           // 清除 JS 设的 display:none
                     el.style.transition = 'none';
-                    el.style.visibility = '';
-                    el.style.pointerEvents = '';
-                    el.style.transform = '';
                     el.style.opacity = '0';
                 });
                 requestAnimationFrame(() => {
@@ -1649,15 +1648,11 @@ html.dark { background-color: transparent !important; }
                 });
             } else {
                 // 翻页或筛选状态：隐藏 hero/专题/footer
-                // 用 visibility:hidden 替代 display:none + setTimeout，避免异步竞态导致页面卡灰
+                // 必须用 display:none 脱离文档流，否则 min-h-screen 的 hero 会撑出一整屏空白
                 const collectionsSection = document.getElementById('collections-section');
                 [siteHeader, collectionsSection, aboutFooter].forEach(el => {
                     if (!el) return;
-                    el.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
-                    el.style.opacity = '0';
-                    el.style.transform = 'translateY(-8px)';
-                    el.style.pointerEvents = 'none';
-                    el.style.visibility = 'hidden';
+                    el.style.display = 'none';
                 });
             }
 
