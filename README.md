@@ -168,14 +168,9 @@ mkdir -p uploads/music && chmod 755 uploads/music/
 
 ## 邮件通知配置
 
-如需在访客提交友链申请时收到邮件通知，编辑 `email/mailer.php`，配置 SMTP 信息：
+如需在访客提交友链申请时收到邮件通知，admin后台里添加smtp服务信息
 
-```php
-$mail->Host     = 'smtp.example.com';
-$mail->Username = 'your@email.com';
-$mail->Password = 'your_smtp_password';
-$mail->Port     = 465;
-```
+
 
 ## API 说明
 
@@ -210,4 +205,4 @@ email/vendor/
 ```
 
 ## 项目地址
-[点击访问](https://blog.catvb.com)
+[昨夜书](https://blog.catvb.com)
