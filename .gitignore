@@ -1,9 +1,3 @@
-# 敏感配置文件
-includes/db.php
-includes/admin_credentials.php
-
 # 用户上传文件
 uploads/
 
-# Composer 依赖
-email/vendor/
